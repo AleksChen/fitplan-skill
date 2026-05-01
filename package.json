@@ -23,6 +23,7 @@
     "docs/images/dashboard-preview.png",
     "SKILL.md",
     "README.md",
+    "README.*.md",
     "LICENSE"
   ],
   "exports": {

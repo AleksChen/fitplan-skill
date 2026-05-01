@@ -1,67 +1,70 @@
 # FitPlan Skill
 
-FitPlan Skill 是一个通用的饮食规划 AI Skill，用于把用户画像转成可解释的热量、三大营养素、餐单建议和本地 HTML 饮食仪表盘。
+**Languages:** English | [中文](README.zh-CN.md) | [Español](README.es.md) | [한국어](README.ko.md) | [日本語](README.ja.md) | [العربية](README.ar.md)
 
-它不绑定单一平台：可以作为支持 `SKILL.md` 的 AI 助手 Skill 使用，也可以作为 TypeScript 计算库集成到 Web、CLI、Bot、Agent 或后端服务中。
+FitPlan Skill is a platform-neutral AI skill and TypeScript toolkit for turning a user profile into explainable calorie targets, macro targets, meal suggestions, and a local HTML nutrition dashboard.
+
+It can be used in two ways: as an AI assistant skill through `SKILL.md`, or as a TypeScript library inside a web app, CLI, bot, agent, or backend service.
 
 ![FitPlan Skill dashboard preview](docs/images/dashboard-preview.png)
 
 _Dashboard preview generated with gpt-image-2 for README illustration._
 
-> 当前项目是 MVP。它适合一般饮食规划和健身目标拆解，不提供医疗诊断、治疗或处方建议。
+> FitPlan Skill is an MVP for general fitness and nutrition planning. It does not provide medical diagnosis, treatment, or prescription advice.
 
-## 功能
+## Features
 
-- 通过 Mifflin-St Jeor 公式计算 BMR。
-- 通过 PAL 活动系数估算 TDEE。
-- 支持 `cut`、`bulk`、`maintain`、`glucose_control` 四类目标。
-- 自动分配蛋白质、脂肪和碳水目标。
-- 基于内置中文食物库生成基础餐单。
-- 明确食物重量基准：生重、熟重或包装标示。
-- 输出结构化 JSON，方便其他应用继续处理。
-- 渲染离线可用的单文件本地 HTML Dashboard，用户可以直接用浏览器打开。
+- Calculates BMR with the Mifflin-St Jeor equation.
+- Estimates TDEE with PAL activity factors.
+- Supports four goals: `cut`, `bulk`, `maintain`, and `glucose_control`.
+- Allocates protein, fat, and carbohydrate targets automatically.
+- Generates a starter meal plan from a bundled Chinese food database.
+- Keeps food weight basis explicit: raw, cooked, or packaged-label weight.
+- Returns structured JSON for downstream apps and agents.
+- Renders an offline, single-file local HTML dashboard.
 
-## 适配平台
+## Architecture
 
-FitPlan Skill 分成三层，方便在不同平台复用：
+FitPlan Skill is split into three reusable layers:
 
-| 层级 | 文件 | 用途 |
+| Layer | Files | Purpose |
 | --- | --- | --- |
-| Skill 指令层 | `SKILL.md` | 给支持 Skill 的 AI 助手读取，指导它如何采集信息、计算和输出饮食计划。 |
-| 计算引擎层 | `src/` | TypeScript 代码，提供 BMR、TDEE、宏量营养素和餐单生成函数。 |
-| 展示模板层 | `templates/` / `src/render/` | 生成可本地打开的 HTML 饮食仪表盘。 |
+| Skill instructions | `SKILL.md` | Guides an AI assistant through intake, calculation, meal planning, and output. |
+| Calculation engine | `src/` | TypeScript functions for BMR, TDEE, macros, and meal generation. |
+| Presentation layer | `templates/` / `src/render/` | Produces a browser-ready local HTML dashboard. |
 
-可用方式包括：
+Common integration modes:
 
-- AI Skill：将仓库作为一个 Skill 安装或复制到目标平台的 Skills 目录。
-- TypeScript library：在 Node.js、Web 构建工具或 Agent Runtime 中调用 `createFitPlan`。
-- Local HTML generator：调用 `createFitPageHtml` 生成完整 HTML 字符串。
-- Data package：复用 `assets/foods_zh.json` 作为初始食物库，并按相同 schema 扩展。
+- **AI Skill:** install or copy the repository into a skill-enabled assistant runtime.
+- **TypeScript library:** call `createFitPlan` from Node.js, a web build, an agent runtime, or a backend service.
+- **Local HTML generator:** call `createFitPageHtml` to get a complete standalone HTML string.
+- **Data package:** reuse and extend `assets/foods_zh.json` as a starter food database.
 
-## 目录结构
+## Project Structure
 
 ```text
 fitplan-skill/
-├── SKILL.md                 # 通用 AI Skill 指令入口
-├── README.md                # 项目说明和使用方法
+├── SKILL.md                 # Platform-neutral AI skill instructions
+├── README.md                # Project overview and usage
 ├── assets/
-│   └── foods_zh.json        # 50 种常见中文健康食物数据
+│   └── foods_zh.json        # Chinese food database
 ├── docs/
-│   └── nutrition-logic.md   # 计算公式和默认参数说明
+│   └── nutrition-logic.md   # Formula and default-parameter notes
 ├── src/
-│   ├── calculators/         # BMR、TDEE、宏量营养素计算
-│   ├── planner/             # 餐单生成
-│   ├── render/              # HTML 渲染
-│   ├── types/               # TypeScript 类型
-│   └── index.ts             # 公共 API 入口
+│   ├── calculators/         # BMR, TDEE, and macro calculations
+│   ├── planner/             # Meal generation
+│   ├── render/              # HTML rendering
+│   ├── types/               # TypeScript types
+│   └── index.ts             # Public API entry
 ├── scripts/
-│   └── copy-assets.mjs      # 跨平台构建资源复制脚本
+│   ├── clean.mjs            # Removes build output
+│   └── copy-assets.mjs      # Copies runtime assets into dist
 ├── templates/
-│   └── modern-v1.html       # 单文件 HTML 模板
-└── tests/                   # 单元测试
+│   └── modern-v1.html       # Single-file HTML template
+└── tests/                   # Unit tests
 ```
 
-## 安装与开发
+## Installation and Development
 
 ```bash
 npm install
@@ -69,7 +72,7 @@ npm test
 npm run build
 ```
 
-也可以使用 pnpm：
+You can also use pnpm:
 
 ```bash
 pnpm install
@@ -77,23 +80,23 @@ pnpm test
 pnpm run build
 ```
 
-## 作为 AI Skill 使用
+## Use as an AI Skill
 
-将仓库放到目标平台的 Skills 目录后，让助手读取 `SKILL.md`。用户可以用自然语言提出请求，例如：
+Place this repository in the target runtime's Skills directory and let the assistant read `SKILL.md`. A user can ask in plain language, for example:
 
 ```text
-帮我做一个减脂饮食计划。我是男性，30 岁，175cm，75kg，每周训练 4 次，不吃牛肉。
+Create a cutting meal plan for me. I am male, 30 years old, 175 cm, 75 kg, train 4 times a week, and do not eat beef.
 ```
 
-Skill 会引导助手完成以下流程：
+The skill guides the assistant to:
 
-1. 收集或补全身高、体重、年龄、性别、活动等级、目标和饮食偏好。
-2. 计算 BMR、TDEE、目标热量和三大营养素。
-3. 生成结构化饮食计划。
-4. 在需要时输出本地 HTML 仪表盘。
-5. 对控糖、肾病、孕期、饮食障碍等高风险场景给出边界提示。
+1. Collect or normalize height, weight, age, sex, activity level, goal, and dietary preferences.
+2. Calculate BMR, TDEE, target calories, and macro targets.
+3. Generate a structured meal plan.
+4. Render a local HTML dashboard when useful.
+5. Add clear safety boundaries for diabetes, kidney disease, pregnancy, eating disorders, adolescents, older adults, and other clinical contexts.
 
-## 作为 TypeScript 库使用
+## Use as a TypeScript Library
 
 ```ts
 import { createFitPlan, createFitPageHtml } from "fitplan-skill";
@@ -116,7 +119,7 @@ console.log(plan.macros);
 console.log(html);
 ```
 
-示例输出节选：
+Example output excerpt:
 
 ```json
 {
@@ -146,9 +149,9 @@ console.log(html);
 }
 ```
 
-`createFitPageHtml` 返回完整 HTML 字符串，内部包含样式和数据，不依赖 CDN。
+`createFitPageHtml` returns a complete HTML document with embedded styles and data. It does not depend on a CDN.
 
-## 输入字段
+## Input Shape
 
 ```ts
 type UserProfile = {
@@ -161,36 +164,36 @@ type UserProfile = {
 };
 ```
 
-活动等级：
+Activity levels:
 
-- `sedentary`：久坐，几乎不运动
-- `light`：每周 1-3 次训练
-- `moderate`：每周 3-5 次训练
-- `high`：每周 6-7 次训练或体力劳动
-- `athlete`：高训练量或接近每日两练
+- `sedentary`: desk work and little exercise
+- `light`: 1-3 training sessions per week
+- `moderate`: 3-5 training sessions per week
+- `high`: 6-7 sessions per week or physical work
+- `athlete`: high training volume or near twice-daily training
 
-目标：
+Goals:
 
-- `cut`：减脂，约 20% 热量缺口
-- `bulk`：增肌，约 10% 热量盈余
-- `maintain`：维持体重
-- `glucose_control`：控糖友好，维持热量并降低碳水比例
+- `cut`: fat loss with about a 20% calorie deficit
+- `bulk`: muscle gain with about a 10% calorie surplus
+- `maintain`: weight maintenance
+- `glucose_control`: glucose-conscious planning at maintenance calories with a lower carbohydrate ratio
 
-## 输出内容
+## Output
 
-`createFitPlan` 返回：
+`createFitPlan` returns:
 
-- `profile`：标准化用户画像
-- `energy.bmr`：基础代谢
-- `energy.tdee`：每日总消耗
-- `energy.targetCalories`：目标热量
-- `macros`：蛋白质、脂肪、碳水克数
-- `meals`：早餐、午餐、晚餐、加餐
-- `notes`：食物重量、误差和健康边界说明
+- `profile`: normalized user profile
+- `energy.bmr`: basal metabolic rate
+- `energy.tdee`: total daily energy expenditure
+- `energy.targetCalories`: goal-adjusted calorie target
+- `macros`: protein, fat, and carbohydrate grams
+- `meals`: breakfast, lunch, dinner, and snack
+- `notes`: weight-basis, accuracy, and health-boundary notes
 
-## 扩展食物库
+## Food Database
 
-内置食物库位于 `assets/foods_zh.json`。新增食物时保持以下字段：
+The bundled food database lives at `assets/foods_zh.json`. Add new foods with the same schema:
 
 ```json
 {
@@ -206,34 +209,34 @@ type UserProfile = {
 }
 ```
 
-`basis` 很重要：
+The `basis` field matters:
 
-- `raw`：生重
-- `cooked`：熟重
-- `packaged`：以包装营养标签为准
+- `raw`: raw weight
+- `cooked`: cooked weight
+- `packaged`: nutrition-label weight
 
-## 计算逻辑
+## Nutrition Logic
 
-详细公式见 [docs/nutrition-logic.md](docs/nutrition-logic.md)。
+Detailed formulas are documented in [docs/nutrition-logic.md](docs/nutrition-logic.md).
 
-默认策略：
+Default strategy:
 
-- 减脂：`TDEE * 0.8`，蛋白质约 `2.0g/kg`
-- 增肌：`TDEE * 1.1`，蛋白质约 `1.8g/kg`
-- 维持：`TDEE * 1.0`，蛋白质约 `1.5g/kg`
-- 控糖：`TDEE * 1.0`，碳水热量约限制在 38% 内
+- Cut: `TDEE * 0.8`, protein around `2.0g/kg`
+- Bulk: `TDEE * 1.1`, protein around `1.8g/kg`
+- Maintain: `TDEE * 1.0`, protein around `1.5g/kg`
+- Glucose control: `TDEE * 1.0`, carbohydrate calories capped around 38%
 
-## 健康边界
+## Health Boundaries
 
-FitPlan Skill 不诊断、治疗或管理疾病。以下人群在改变饮食前应咨询医生或注册营养师：
+FitPlan Skill does not diagnose, treat, or manage disease. People in the following situations should consult a physician or registered dietitian before changing their diet:
 
-- 糖尿病或正在使用降糖药物
-- 肾病、肝病、心血管疾病
-- 孕期、哺乳期
-- 饮食障碍或相关病史
-- 未成年人、老年人
-- 近期手术、重大疾病恢复期
+- Diabetes or glucose-lowering medication
+- Kidney, liver, or cardiovascular disease
+- Pregnancy or lactation
+- Eating disorders or related history
+- Adolescence or older adulthood
+- Recent surgery or recovery from major illness
 
-## 许可证
+## License
 
 MIT
