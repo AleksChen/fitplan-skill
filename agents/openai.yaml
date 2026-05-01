@@ -1,0 +1,3 @@
+display_name: FitPlan Skill
+short_description: Generate calorie, macro, meal, and local HTML diet plans.
+default_prompt: Create a FitPlan diet plan from my profile and render a local HTML dashboard.

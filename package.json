@@ -1,0 +1,56 @@
+{
+  "name": "fitplan-skill",
+  "version": "0.1.0",
+  "description": "A platform-neutral AI skill and TypeScript toolkit for nutrition planning, macro calculation, and local HTML diet dashboards.",
+  "type": "module",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aleksChen/fitplan-skill.git"
+  },
+  "homepage": "https://github.com/aleksChen/fitplan-skill#readme",
+  "bugs": {
+    "url": "https://github.com/aleksChen/fitplan-skill/issues"
+  },
+  "author": "wenwu <wenwuchen1948@gmail.com>",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "assets",
+    "templates",
+    "docs/nutrition-logic.md",
+    "docs/images/dashboard-preview.png",
+    "SKILL.md",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    }
+  },
+  "scripts": {
+    "clean": "node scripts/clean.mjs",
+    "build": "npm run clean && tsc -p tsconfig.json && node scripts/copy-assets.mjs",
+    "prepack": "npm run build",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.test.json"
+  },
+  "keywords": [
+    "ai-skill",
+    "codex-skill",
+    "claude-skill",
+    "nutrition",
+    "diet",
+    "fitness",
+    "meal-plan"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "typescript": "^5.4.5",
+    "vitest": "^4.1.5"
+  }
+}
